@@ -1,9 +1,9 @@
 //
-//    FILE: AiThinker_A7.h
-//  AUTHOR: Flyrainning
+// FILE: AiThinker_A7.h
+// AUTHOR: Flyrainning
 // VERSION: 0.1.1
 // PURPOSE: Ai-Thinker A6 A7 A20 lib for Arduino
-//     URL: http://www.fengpiao.net
+// URL: http://www.fengpiao.net
 //
 //
 
@@ -20,139 +20,127 @@
 #define AT_TIMEOUT 3
 #define AT_RST 2
 
-class AiThinker_A7{
+class AiThinker_A7 {
 
 private:
-  int PIN_Power;
+  int PIN_Power
   int PIN_Reset;
   int PIN_RX;
   int PIN_TX;
 
-
   char buffer[100];
-
-
-  bool debug_on=false;
+  bool debug_on = false;
 
 public:
-  SoftwareSerial* BoardSerial=NULL;
+  SoftwareSerial*BoardSerial = NULL;
   AiThinker_A7();
   ~AiThinker_A7();
-  AiThinker_A7(int RX,int TX,int Power=0,int Reset=0);
+  AiThinker_A7(int RX, int TX, int Power = 0, int Reset = 0);
 
-  //取得SIM卡的ccid
-  String CCID();
-  //pin设置
-  void setup(int RX,int TX,int Power=0,int Reset=0);
+  // Get the ccid of the SIM card
+  string CCID();
+  // pin set
+  void setup(int RX, int TX, int Power = 0, int Reset = 0);
   /*
-  启动模块
-  baudrate 与模块通讯的波特率
-  reset 是否调用_start()重置模块设置
+  Start the module
+  Baudrate baud rate with module communication
+  Reset Whether to call _start () to reset the module settings
   */
-  void begin(long baudrate=9600,bool reset=true);
-  //启动模块，需设置power pin才有效
+  void begin(long baudrate = 9600, bool reset = true);
+  // start the module, need to set the power pin to be effective
   void power_on();
   /*
-  重置模块，需设置Reset pin才有效
-  重置后需调用bigin重新初始化模块
+  Reset the module, need to set the Reset pin to be effective
+  After reset, call bigin to reinitialize the module
   */
   void reset();
   /*
-  进入串口透传调试模式，可以通过串口直接透传命令到模块
-  用于调试，进入后无退出
+  Into the serial port through the debug mode, you can directly through the serial port through the command to the module
+  Used for debugging, no exit after entering
   */
   void serial_debug();
-  //启动调试信息输出，输出到串口
-  void debug(bool is_on=true);
-  //执行一个命令
-  byte cmd(String command, String response1, String response2, int timeOut=500, int repetitions=2);
-  byte waitFor(String response1, String response2, unsigned long timeOut);
-  String BoardRead();
-  //初始化A6模块，准备at环境
+  // start debugging information output, output to the serial port
+  void debug (bool is_on = true);
+  // execute a command
+  byte cmd(string command, string response1, string response2, int timeOut = 500, int repetitions = 2);
+  byte waitFor(string response1, string response2, unsigned long timeOut);
+  string BoardRead();
+  // initialize the A6 module and prepare the at environment
   bool _start();
 
   bool Operator();
 
   bool SetAPN();
   
-  //初始化GPRS环境，启动GPRS
+  // initialize the GPRS environment and start GPRS
   bool GPRS_Start();
-  //建立一个TCP链接
-  bool TCP(String host,String port);
-  //建立一个UDP链接
-  bool UDP(String host,String port);
-  //建立链接(TCP或UDP)以后，发送一段数据
-  bool Send(String data);
-  //断开链接(TCP或UDP)
+  // Create a TCP link
+  bool TCP(string host, string port);
+  // Create a UDP link
+  bool UDP(string host, string port);
+  // After creating a link (TCP or UDP), send a piece of data
+  bool Send(string data);
+  // disconnect the link (TCP or UDP)
   bool Close();
-  //一次性发送数据，包括以下动作：链接，发送，关闭
-  bool Send_once(String host,String port,String data);
-  //单纯向模块发送一条at指令，不等待返回
-  void at(String cmd);
+  // send data at once, including the following actions: link, send, close
+  bool Send_once (string host, string port, string data);
+  // simply send an at command to the module without waiting for a return
+  void at(string cmd);
   /*
-  启动心跳包
-  time 心跳发送间隔，单位秒，time=0停止心跳包
-  send 心跳包发送内容，以16进制标示，长度不能低于3个字节
-  get 设置接受回应包内容，长度不能低于3个字节，16进制格式
+  Start the heartbeat pack
+  Time heartbeat interval, unit seconds, time = 0 stop heartbeat pack
+  Send heartbeat packet to send the contents of the hexadecimal mark, the length can not be less than 3 bytes
+  Get set to accept the contents of the response packet, the length can not be less than 3 bytes, hexadecimal format
 
-  该命令只能在连接服务器成功以后用
+  This command can only be used after the server is connected
   */
-  bool heartbeat(String time="30",String send="FFFAAFFF",String get="FFFAAFFF");
+  bool heartbeat(string time = "30", string send = "FFFAAFFF", string get = "FFFAAFFF");
   /*
-  开启透明传输
-  times表示最大尝试发送失败次数 0-5
-  delay是重发延时，单位毫秒 0-3000
-  max_size是触发发送的包长度 10-100
-  wait_timeout是触发发送时间，单位毫秒 1000-8000，从输入最后一个字符算起，延至超过，系统也会自动发送数据
+  Turn on transparent transmission
+  Times indicates the maximum number of failed attempts to send 0-5
+  Delay is the retransmission delay in milliseconds 0-3000
+  Max_size is the packet length that is triggered to send 10-100
+  Wait_timeout is the trigger send time in milliseconds 1000-8000, from the last input of the characters, extended to more than the system will automatically send data
 
-  该命令只能在连接服务器成功以后用
-  超过1分钟以上没有数据传输，网关可能自动切断连接，如果透传数据频率太低，应先开启心跳包
+  This command can only be used after the server is connected
+  More than 1 minute no data transmission, the gateway may automatically cut off the connection, if the transmission data frequency is too low, you should first open the heartbeat package
   */
-  bool TC_Start(String times="3",String delay="300",int max_size=100,int wait_timeout=1000);
-  //停止透传
+  bool TC_Start(string times = "3", string delay = "300", int max_size = 100, int wait_timeout = 1000);
+  //Stop the pass
   bool TC_Stop();
-  //透传发送数据
-  bool TC_Send(String data);
-  //透传发送数据，自动换行版本
-  //注意：换行只是附加回车后等待发送，并不会直接触发发送，仍然需要等待TC_Start中的触发条件达到后才会发送数据
-  bool TC_Sendln(String data);
+  // Transparent send data
+  bool TC_Send(string data);
+  // Transfers send data, wraps version
+  // Note: the line feed is only an additional carriage return waiting to send, and will not directly trigger the send, still need to wait for TC_Start in the trigger conditions will be sent after the data
+  bool TC_Sendln(string data);
 
-  //发送手机短信
-  bool SendTextMessage(String Number,String msg);
-  //拨打电话
-  bool Call_Number(String Number);
-  //挂断电话
+  // Send SMS
+  bool SendTextMessage(string Number, string msg);
+  //dial number
+  bool Call_Number(string Number);
+  //hang up the phone
   bool Call_Number_Off();
 
 
-  //高级函数
+  // Advanced function
 
-  //通过域名查询出IP，域名查询也需要流量，需要多连接的情况，可以先查询出ip，通过ip建立连接
-  String NameToIP(String ServerName);
-  //通过阿里云的HTTPDNS获取服务器ip
-  String AliHTTPDNS(String ServerName);
-  //先尝试从阿里云HTTPDNS获取，失败以后使用常规DNS获取
-  String NameToIP_Plus(String ServerName);
+  // Through the domain name query out IP, domain name query also need traffic, the need for multiple connections, you can first query out ip, through the ip to establish a connection
+  string NameToIP(string ServerName);
+  // Through Ali cloud HTTPDNS get server ip
+  string AliHTTPDNS(string ServerName);
+  // first try to get from the Ali cloud HTTPDNS, after the failure to use regular DNS to get
+  string NameToIP_Plus(string ServerName);
   /*
-  HTTP的get，返回服务器发送的内容
-  一次性连接，会断开之前的连接
+  HTTP get, return to the server to send the content
+  A one-time connection will disconnect the previous connection
   */
-  String HTTP_GET(String URL);
+  string HTTP_GET(string URL);
   /*
-  HTTP的post，返回服务器发送的内容
-  一次性连接，会断开之前的连接
+  HTTP post, back to the server to send the content
+  A one-time connection will disconnect the previous connection
   */
-  String HTTP_POST(String URL,String data);
+  string HTTP_POST(string URL, string data);
 };
 
 
 
-
-
-
-
-
-
-
-
-#endif
