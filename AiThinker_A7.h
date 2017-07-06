@@ -144,6 +144,9 @@ public:
   A one-time connection will disconnect the previous connection
   */
   String HTTP_POST(String URL,String data);
+
+  bool debug_command(String command, unsigned long timeOut);
+
 };
 
 

@@ -184,6 +184,9 @@ bool AiThinker_A7::GPRS_Start(String APN) {
 
 bool AiThinker_A7::TCP(String host,String port) {
   Close();
+
+  debug_command("AT+CIPSTATUS", 800);
+
   String at="AT+CIPSTART=\"TCP\",\"";
   at=at+host+"\","+port;
   //if (cmd(at, "CONNECT OK", "YES", 16000, 2) == AT_OK) {
@@ -318,33 +321,10 @@ String AiThinker_A7::CCID(){
 String AiThinker_A7::NameToIP(String ServerName, unsigned long timeOut){
   //String command = "AT+CDNSGIP=\""+ServerName+"\"";
   String command = "AT+CDNSGIP?";
-  BoardSerial->println(command);
-  if (debug_on){
-      Serial.print("Command: ");
-      Serial.println(command);
-  }
-  unsigned long entry = millis();
-  String reply = "";
-  byte retVal = 99;
- 
-  do {
-    reply = BoardRead();
-    if ((debug_on)&&(reply != "")) {
-      Serial.print((millis() - entry));
-      Serial.print(" ms ");
-      Serial.print("data = ");
-      Serial.println(reply);
-    }
-  } while ( millis() - entry < timeOut );
- 
-  if (debug_on){
-    Serial.print("retVal = ");
-    Serial.println(retVal);
-    Serial.print("data = ");
-    Serial.println(reply);
-  }
 
-  return reply;    
+  debug_command(command, timeOut);
+
+  return command;    
 }
 String AiThinker_A7::AliHTTPDNS(String ServerName){
 
@@ -358,3 +338,37 @@ String AiThinker_A7::HTTP_GET(String URL){
 String AiThinker_A7::HTTP_POST(String URL,String data){
 
 }
+
+bool AiThinker_A7::debug_command(String command, unsigned long timeOut) {
+
+  BoardSerial->println(command);
+  if (debug_on){
+      Serial.print("Command: ");
+      Serial.println(command);
+  }
+
+  unsigned long entry = millis();
+  String reply = "";
+  byte retVal = 99;
+ 
+  reply = BoardRead();
+  if (debug_on){
+    Serial.print("retVal = ");
+    Serial.println(retVal);
+    Serial.print("data = ");
+    Serial.println(reply);
+  }
+
+  do {
+    reply = BoardRead();
+    if ((debug_on)&&(reply != "")) {
+      Serial.print((millis() - entry));
+      Serial.print(" ms ");
+      Serial.print("data = ");
+      Serial.println(reply);
+    }
+  } while ( millis() - entry < timeOut );
+ 
+
+
+} 
