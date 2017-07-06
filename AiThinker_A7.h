@@ -5,7 +5,8 @@
 // PURPOSE: Ai-Thinker A6 A7 A20 lib for Arduino
 // URL: http://www.fengpiao.net
 //
-//
+
+
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
@@ -22,13 +23,14 @@
 class AiThinker_A7{
 
 private:
-  int PIN_Power
+  int PIN_Power;
   int PIN_Reset;
   int PIN_RX;
   int PIN_TX;
 
   char buffer[100];
-  bool debug_on = false;
+
+  bool debug_on=false;
 
 public:
   SoftwareSerial*BoardSerial = NULL;
