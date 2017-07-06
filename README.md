@@ -1,19 +1,19 @@
-# AiThinker_A6
-An ESP8266/Arduino library for communicating with the Ai-Thinker A6 ( A7 ) GSM module
+# AiThinker_A7
+An ESP8266/Arduino library for communicating with the Ai-Thinker A7 ( A6 ) GSM module
 
 Arduino's GSM mobile phone module library for Ai-Thinker A6 A7 A20 series chips, theoretically also support other devices using AT commands.
 
 Provide SMS, call, GPRS networking (TCP UDP TCP data transmission) and other functions.
 
 ```
-#include "AiThinker_A6.h"
+#include "AiThinker_A7.h"
 
 #define GPRS_Serial_RX 7
 #define GPRS_Serial_TX 8
 #define GPRS_Power_pin 9
 #define GPRS_Reset_pin 10
 
-AiThinker_A6 Board(GPRS_Serial_RX, GPRS_Serial_TX,GPRS_Power_pin,GPRS_Reset_pin); // RX, TX
+AiThinker_A7 Board(GPRS_Serial_RX, GPRS_Serial_TX,GPRS_Power_pin,GPRS_Reset_pin); // RX, TX
 
 void setup() {
   Serial.begin(115200);
