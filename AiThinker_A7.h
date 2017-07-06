@@ -70,6 +70,11 @@ public:
   String BoardRead();
   //初始化A6模块，准备at环境
   bool _start();
+
+  bool Operator();
+
+  bool SetAPN();
+  
   //初始化GPRS环境，启动GPRS
   bool GPRS_Start();
   //建立一个TCP链接

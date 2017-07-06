@@ -34,6 +34,8 @@ void AiThinker_A7::begin(long baudrate,bool reset){
   power_on();
   if (reset){
     _start();
+    Operator();
+    SetAPN();    
   }
 
 }
@@ -147,6 +149,27 @@ bool AiThinker_A7::_start() {
     }else return AT_NO;
   }else return AT_NO;
 }
+
+bool AiThinker_A7::Operator() {
+  if (cmd("AT+COPS=1,0,\"Turkcell\"", "OK", "YES", 8000, 2) == AT_OK) {
+        return AT_OK;
+  }
+  else {
+        return AT_NO;
+  }
+
+}
+
+bool AiThinker_A7::SetAPN() {
+  if (cmd("AT+CSTT=\"TM\",\"\",\"\"", "OK", "YES", 8000, 2) == AT_OK) {
+        return AT_OK;
+  }
+  else {
+        return AT_NO;
+  }
+
+}
+
 bool AiThinker_A7::GPRS_Start() {
   if (cmd("AT+CGATT=1", "OK", "YES", 8000, 2) == AT_OK) {
     if (cmd("AT+CGACT=1,1", "OK", "YES", 8000, 2) == AT_OK) {
