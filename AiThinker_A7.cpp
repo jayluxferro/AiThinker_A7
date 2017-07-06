@@ -311,7 +311,35 @@ String AiThinker_A7::CCID(){
 
 }
 String AiThinker_A7::NameToIP(String ServerName){
+  at("AT+CDNSGIP="+ServerName);
 
+  unsigned long entry = millis();
+  String reply = "";//BoardRead();
+  byte retVal = 99;
+  do {
+    reply = BoardRead();
+    if ((debug_on)&&(reply != "")) {
+      Serial.print((millis() - entry));
+      Serial.print(" ms ");
+      Serial.print("data = ");
+      Serial.println(reply);
+    }
+  } while ( millis() - entry < timeOut );
+
+  if ((millis() - entry) >= timeOut) {
+    retVal = AT_TIMEOUT;
+  } else {  
+    retVal = AT_NO;
+  }
+
+  if (debug_on){
+    Serial.print("retVal = ");
+    Serial.println(retVal);
+    Serial.print("data = ");
+    Serial.println(reply);
+  }
+  return retVal;
+    
 }
 String AiThinker_A7::AliHTTPDNS(String ServerName){
 
