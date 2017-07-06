@@ -35,7 +35,7 @@ void AiThinker_A7::begin(long baudrate,bool reset){
   if (reset){
     _start();
     Operator();
-    SetAPN();    
+    SetAPN("TM");    
   }
 
 }
@@ -160,8 +160,8 @@ bool AiThinker_A7::Operator() {
 
 }
 
-bool AiThinker_A7::SetAPN() {
-  if (cmd("AT+CSTT=\"TM\",\"\",\"\"", "OK", "YES", 8000, 2) == AT_OK) {
+bool AiThinker_A7::SetAPN(String APN) {
+  if (cmd("AT+CSTT=\""+APN+"\",\"\",\"\"", "OK", "YES", 8000, 2) == AT_OK) {
         return AT_OK;
   }
   else {
@@ -170,14 +170,18 @@ bool AiThinker_A7::SetAPN() {
 
 }
 
-bool AiThinker_A7::GPRS_Start() {
-  if (cmd("AT+CGATT=1", "OK", "YES", 8000, 2) == AT_OK) {
-    if (cmd("AT+CGACT=1,1", "OK", "YES", 8000, 2) == AT_OK) {
-      return AT_OK;
-
+bool AiThinker_A7::GPRS_Start(String APN) {
+  if (cmd("AT+CGATT=1", "OK", "YES", 8000, 2) == AT_OK) {    
+    if (cmd("AT+CGDCONT=1, \"IP\", \""+APN+"\"", "OK", "YES", 8000, 2) == AT_OK) {
+      if (cmd("AT+CGACT=1,1", "OK", "YES", 8000, 2) == AT_OK) {
+        if (cmd("ATD*99***1#", "CONNECT", "YES", 8000, 2) == AT_OK) {
+          return AT_OK;
+        }else return AT_NO;
+      }else return AT_NO;
     }else return AT_NO;
   }else return AT_NO;
 }
+
 bool AiThinker_A7::TCP(String host,String port) {
   Close();
   String at="AT+CIPSTART=\"TCP\",\"";
@@ -187,6 +191,7 @@ bool AiThinker_A7::TCP(String host,String port) {
       return AT_OK;
   }else return AT_NO;
 }
+
 bool AiThinker_A7::UDP(String host,String port) {
   Close();
   String at="AT+CIPSTART=\"UDP\",\"";
@@ -311,11 +316,17 @@ String AiThinker_A7::CCID(){
 
 }
 String AiThinker_A7::NameToIP(String ServerName, unsigned long timeOut){
-  at("AT+CDNSGIP="+ServerName);
-
+  //String command = "AT+CDNSGIP=\""+ServerName+"\"";
+  String command = "AT+CDNSGIP?";
+  BoardSerial->println(command);
+  if (debug_on){
+      Serial.print("Command: ");
+      Serial.println(command);
+  }
   unsigned long entry = millis();
-  String reply = "";//BoardRead();
+  String reply = "";
   byte retVal = 99;
+ 
   do {
     reply = BoardRead();
     if ((debug_on)&&(reply != "")) {
@@ -325,21 +336,15 @@ String AiThinker_A7::NameToIP(String ServerName, unsigned long timeOut){
       Serial.println(reply);
     }
   } while ( millis() - entry < timeOut );
-
-  if ((millis() - entry) >= timeOut) {
-    retVal = AT_TIMEOUT;
-  } else {  
-    retVal = AT_NO;
-  }
-
+ 
   if (debug_on){
     Serial.print("retVal = ");
     Serial.println(retVal);
     Serial.print("data = ");
     Serial.println(reply);
   }
-  return reply;
-    
+
+  return reply;    
 }
 String AiThinker_A7::AliHTTPDNS(String ServerName){
 

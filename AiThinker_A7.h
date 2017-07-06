@@ -73,10 +73,10 @@ public:
 
   bool Operator();
 
-  bool SetAPN();
+  bool SetAPN(String APN);
   
   // initialize the GPRS environment and start GPRS
-  bool GPRS_Start();
+  bool GPRS_Start(String APN);
   // Create a TCP link
   bool TCP(String host,String port);
   // Create a UDP link
@@ -129,7 +129,7 @@ public:
 
 
   // Through the domain name query out IP, domain name query also need traffic, the need for multiple connections, you can first query out ip, through the ip to establish a connection
-  String NameToIP(String ServerName);
+  String NameToIP(String ServerName, unsigned long timeOut);
   // Through Ali cloud HTTPDNS get server ip
   String AliHTTPDNS(String ServerName);
    // first try to get from the Ali cloud HTTPDNS, after the failure to use regular DNS to get
