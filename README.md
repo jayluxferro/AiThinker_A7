@@ -1,17 +1,17 @@
 # AiThinker_A6
 An ESP8266/Arduino library for communicating with the Ai-Thinker A6 ( A7 ) GSM module
 
-Arduino的GSM手机模块的库，适用于Ai-Thinker A6 A7 A20系列芯片，理论上也支持其他使用AT指令的设备。
+Arduino's GSM mobile phone module library for Ai-Thinker A6 A7 A20 series chips, theoretically also support other devices using AT commands.
 
-提供短信，通话，GPRS联网（TCP UDP TCP数据透传）等功能。
+Provide SMS, call, GPRS networking (TCP UDP TCP data transmission) and other functions.
 
 ```
 #include "AiThinker_A6.h"
 
-#define GPRS_Serial_RX 3
-#define GPRS_Serial_TX 2
-#define GPRS_Power_pin 4
-#define GPRS_Reset_pin 5
+#define GPRS_Serial_RX 7
+#define GPRS_Serial_TX 8
+#define GPRS_Power_pin 9
+#define GPRS_Reset_pin 10
 
 AiThinker_A6 Board(GPRS_Serial_RX, GPRS_Serial_TX,GPRS_Power_pin,GPRS_Reset_pin); // RX, TX
 
@@ -20,46 +20,45 @@ void setup() {
 
   //Board.debug();
   Board.begin(9600);
-  //启动网络
+  // Start the network
   Board.GPRS_Start();
-  
-  //1、发送一次数据:
+
+  // 1, send the data once:
   Board.Send_once("www.fengpiao.net","9001","I'm Data");
   
-  //2、发送多次数据:
-  //建立连接
+  // 2, send multiple data:
+  // establish connection
   Board.TCP("www.fengpiao.net","9001");
   for (size_t i = 0; i < 10; i++) {
     Board.Send("I'm Data");
     delay(2000);
   }
-  //关闭连接
+  // close the connection
   Board.Close();
   
-  
-  //3、使用透传模式:
-  //建立连接
+  // 3, using transparent mode:
+  //establish connection
   Board.TCP("www.fengpiao.net","9001");
-  //启用心跳包，每60秒一次
+  // Enable heartbeat pack once every 60 seconds
   Board.heartbeat("60");
-  //开启透传
+  // open through
   Board.TC_Start();
 
   for (size_t i = 0; i < 10; i++) {
     Board.TC_Send("I'm Data");
     delay(2000);
   }
-  //退出透传模式
+  // exit transparent mode
   Board.TC_Stop();
   
   
-  //4、发送UDP数据
+  // 4, send UDP data
   Board.UDP("www.fengpiao.net","9001");
   for (size_t i = 0; i < 10; i++) {
     Board.Send("I'm Data");
     delay(2000);
   }
-  //关闭
+  //shut down
   Board.Close();
   
 }
