@@ -1,20 +1,20 @@
-#include "AiThinker_A6.h"
+#include "AiThinker_A7.h"
 
 
-AiThinker_A6::AiThinker_A6(){
+AiThinker_A7::AiThinker_A7(){
 
 }
-AiThinker_A6::~AiThinker_A6(){
+AiThinker_A7::~AiThinker_A7(){
   if(BoardSerial!=NULL){
     delete BoardSerial;
     BoardSerial=NULL;
   }
 }
-AiThinker_A6::AiThinker_A6(int RX,int TX,int Power,int Reset){
-  AiThinker_A6();
+AiThinker_A7::AiThinker_A7(int RX,int TX,int Power,int Reset){
+  AiThinker_A7();
   setup(RX, TX, Power, Reset);
 }
-void AiThinker_A6::setup(int RX,int TX,int Power,int Reset){
+void AiThinker_A7::setup(int RX,int TX,int Power,int Reset){
   PIN_Power=Power;
   PIN_Reset=Reset;
   PIN_RX=RX;
@@ -29,7 +29,7 @@ void AiThinker_A6::setup(int RX,int TX,int Power,int Reset){
 
 }
 
-void AiThinker_A6::begin(long baudrate,bool reset){
+void AiThinker_A7::begin(long baudrate,bool reset){
   BoardSerial->begin(baudrate);
   power_on();
   if (reset){
@@ -37,7 +37,7 @@ void AiThinker_A6::begin(long baudrate,bool reset){
   }
 
 }
-void AiThinker_A6::power_on(){
+void AiThinker_A7::power_on(){
   if (PIN_Power>0){
     pinMode(PIN_Power, OUTPUT);
     digitalWrite(PIN_Power, HIGH);
@@ -48,7 +48,7 @@ void AiThinker_A6::power_on(){
   }
   delay(500);
 }
-void AiThinker_A6::reset(){
+void AiThinker_A7::reset(){
   if (PIN_Reset>0){
     pinMode(PIN_Reset, OUTPUT);
     digitalWrite(PIN_Reset, LOW);
@@ -57,7 +57,7 @@ void AiThinker_A6::reset(){
   }
   delay(500);
 }
-void AiThinker_A6::serial_debug(){
+void AiThinker_A7::serial_debug(){
   Serial.println("Serial Debug:");
   while (1) {
     if (Serial.available()) {
@@ -69,10 +69,10 @@ void AiThinker_A6::serial_debug(){
   }
 
 }
-void AiThinker_A6::debug(bool is_on){
+void AiThinker_A7::debug(bool is_on){
   debug_on=is_on;
 }
-byte AiThinker_A6::cmd(String command, String response1, String response2, int timeOut, int repetitions) {
+byte AiThinker_A7::cmd(String command, String response1, String response2, int timeOut, int repetitions) {
   byte returnValue = AT_NO;
   byte count = 0;
   while (count < repetitions && returnValue != AT_OK) {
@@ -91,7 +91,7 @@ byte AiThinker_A6::cmd(String command, String response1, String response2, int t
   }
   return returnValue;
 }
-byte AiThinker_A6::waitFor(String response1, String response2, unsigned long timeOut) {
+byte AiThinker_A7::waitFor(String response1, String response2, unsigned long timeOut) {
   unsigned long entry = millis();
   String reply = "";//BoardRead();
   byte retVal = 99;
@@ -119,7 +119,7 @@ byte AiThinker_A6::waitFor(String response1, String response2, unsigned long tim
   }
   return retVal;
 }
-String AiThinker_A6::BoardRead() {
+String AiThinker_A7::BoardRead() {
   String reply = "";
   if (BoardSerial->available())  {
     reply = BoardSerial->readString();
@@ -131,7 +131,7 @@ String AiThinker_A6::BoardRead() {
 
   return reply;
 }
-bool AiThinker_A6::_start() {
+bool AiThinker_A7::_start() {
   BoardSerial->println("AT+CREG?");
   byte hi = waitFor("1,", "5,", 1500);  // 1: registered, home network ; 5: registered, roaming
 
@@ -147,7 +147,7 @@ bool AiThinker_A6::_start() {
     }else return AT_NO;
   }else return AT_NO;
 }
-bool AiThinker_A6::GPRS_Start() {
+bool AiThinker_A7::GPRS_Start() {
   if (cmd("AT+CGATT=1", "OK", "YES", 8000, 2) == AT_OK) {
     if (cmd("AT+CGACT=1,1", "OK", "YES", 8000, 2) == AT_OK) {
       return AT_OK;
@@ -155,7 +155,7 @@ bool AiThinker_A6::GPRS_Start() {
     }else return AT_NO;
   }else return AT_NO;
 }
-bool AiThinker_A6::TCP(String host,String port) {
+bool AiThinker_A7::TCP(String host,String port) {
   Close();
   String at="AT+CIPSTART=\"TCP\",\"";
   at=at+host+"\","+port;
@@ -164,7 +164,7 @@ bool AiThinker_A6::TCP(String host,String port) {
       return AT_OK;
   }else return AT_NO;
 }
-bool AiThinker_A6::UDP(String host,String port) {
+bool AiThinker_A7::UDP(String host,String port) {
   Close();
   String at="AT+CIPSTART=\"UDP\",\"";
   at=at+host+"\","+port;
@@ -172,7 +172,7 @@ bool AiThinker_A6::UDP(String host,String port) {
       return AT_OK;
   }else return AT_NO;
 }
-bool AiThinker_A6::Send(String data){
+bool AiThinker_A7::Send(String data){
   int len=data.length();
   String sd="AT+CIPSEND=";
   sd=sd+len;
@@ -186,13 +186,13 @@ bool AiThinker_A6::Send(String data){
   delay(600);
   return r;
 }
-bool AiThinker_A6::Close(){
+bool AiThinker_A7::Close(){
   BoardSerial->print("\r\n");
   if (cmd("AT+CIPCLOSE", "OK", "YES", 3000, 1) == AT_OK) {
       return AT_OK;
   }else return AT_NO;
 }
-bool AiThinker_A6::Send_once(String host,String port,String data){
+bool AiThinker_A7::Send_once(String host,String port,String data){
   if (TCP(host, port)) {
     if (Send(data)) {
       Close();
@@ -200,13 +200,13 @@ bool AiThinker_A6::Send_once(String host,String port,String data){
     }else return AT_NO;
   }else return AT_NO;
 }
-void AiThinker_A6::at(String cmd){
+void AiThinker_A7::at(String cmd){
   BoardSerial->println(cmd);
 }
 
 
 
-bool AiThinker_A6::SendTextMessage(String Number,String msg){
+bool AiThinker_A7::SendTextMessage(String Number,String msg){
   if (cmd("AT+CMGF=1", "OK", "YES", 3000, 2) == AT_OK){
     delay(100);
     if (cmd("AT+CMGS=\""+Number+"\"", ">", "YES", 5000, 2) == AT_OK){
@@ -221,13 +221,13 @@ bool AiThinker_A6::SendTextMessage(String Number,String msg){
   }else return AT_NO;
 
 }
-bool AiThinker_A6::Call_Number(String Number){
+bool AiThinker_A7::Call_Number(String Number){
   cmd("AT+SNFS=0", "OK", "YES", 20000, 2);//0,切换到耳机 1,切换到听筒
   if (cmd("ATD"+Number, "OK", "YES", 20000, 2) == AT_OK){
     return AT_OK;
   }else return AT_NO;
 }
-bool AiThinker_A6::Call_Number_Off(){
+bool AiThinker_A7::Call_Number_Off(){
   if (cmd("ATH", "OK", "YES", 20000, 2) == AT_OK){
     return AT_OK;
   }else return AT_NO;
@@ -240,7 +240,7 @@ bool AiThinker_A6::Call_Number_Off(){
 
 //******************下方是实现完毕，但还未经过测试的功能
 
-bool AiThinker_A6::heartbeat(String time,String send,String get){
+bool AiThinker_A7::heartbeat(String time,String send,String get){
   if (time!="0"){
     if (cmd("AT+CIPHCFG=0,"+time, "OK", "YES", 5000, 2) == AT_OK) {
       if (cmd("AT+CIPHCFG=1,"+send, "OK", "YES", 5000, 2) == AT_OK) {
@@ -258,7 +258,7 @@ bool AiThinker_A6::heartbeat(String time,String send,String get){
   }
 
 }
-bool AiThinker_A6::TC_Start(String times,String delay,int max_size,int wait_timeout){
+bool AiThinker_A7::TC_Start(String times,String delay,int max_size,int wait_timeout){
   if (cmd("AT+CIPTCFG=0,"+times, "OK", "YES", 5000, 2) == AT_OK) {
     if (cmd("AT+CIPTCFG=1,"+delay, "OK", "YES", 5000, 2) == AT_OK) {
       if (cmd("AT+CIPTCFG=2,"+String(max_size), "OK", "YES", 5000, 2) == AT_OK){
@@ -270,17 +270,17 @@ bool AiThinker_A6::TC_Start(String times,String delay,int max_size,int wait_time
     }else return AT_NO;
   }else return AT_NO;
 }
-bool AiThinker_A6::TC_Stop(){
+bool AiThinker_A7::TC_Stop(){
   BoardSerial->println();
   BoardSerial->println("+++");
   delay(500);
   return true;
 }
-bool AiThinker_A6::TC_Send(String cmd){
+bool AiThinker_A7::TC_Send(String cmd){
   BoardSerial->print(cmd);
   return true;
 }
-bool AiThinker_A6::TC_Sendln(String cmd){
+bool AiThinker_A7::TC_Sendln(String cmd){
   BoardSerial->println(cmd);
   return true;
 }
@@ -288,21 +288,21 @@ bool AiThinker_A6::TC_Sendln(String cmd){
 
 
 //******************下方是预留的但还未真正实现完毕的功能
-String AiThinker_A6::CCID(){
+String AiThinker_A7::CCID(){
 
 }
-String AiThinker_A6::NameToIP(String ServerName){
+String AiThinker_A7::NameToIP(String ServerName){
 
 }
-String AiThinker_A6::AliHTTPDNS(String ServerName){
+String AiThinker_A7::AliHTTPDNS(String ServerName){
 
 }
-String AiThinker_A6::NameToIP_Plus(String ServerName){
+String AiThinker_A7::NameToIP_Plus(String ServerName){
 
 }
-String AiThinker_A6::HTTP_GET(String URL){
+String AiThinker_A7::HTTP_GET(String URL){
 
 }
-String AiThinker_A6::HTTP_POST(String URL,String data){
+String AiThinker_A7::HTTP_POST(String URL,String data){
 
 }

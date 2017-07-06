@@ -1,5 +1,5 @@
 //
-//    FILE: AiThinker_A6.h
+//    FILE: AiThinker_A7.h
 //  AUTHOR: Flyrainning
 // VERSION: 0.1.1
 // PURPOSE: Ai-Thinker A6 A7 A20 lib for Arduino
@@ -11,8 +11,8 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
-#ifndef AiThinker_A6_h
-#define AiThinker_A6_h
+#ifndef AiThinker_A7_h
+#define AiThinker_A7_h
 
 
 #define AT_OK 1
@@ -20,7 +20,7 @@
 #define AT_TIMEOUT 3
 #define AT_RST 2
 
-class AiThinker_A6{
+class AiThinker_A7{
 
 private:
   int PIN_Power;
@@ -36,9 +36,9 @@ private:
 
 public:
   SoftwareSerial* BoardSerial=NULL;
-  AiThinker_A6();
-  ~AiThinker_A6();
-  AiThinker_A6(int RX,int TX,int Power=0,int Reset=0);
+  AiThinker_A7();
+  ~AiThinker_A7();
+  AiThinker_A7(int RX,int TX,int Power=0,int Reset=0);
 
   //取得SIM卡的ccid
   String CCID();
