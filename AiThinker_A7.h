@@ -7,7 +7,6 @@
 //
 //
 
-
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
@@ -20,7 +19,7 @@
 #define AT_TIMEOUT 3
 #define AT_RST 2
 
-class AiThinker_A7 {
+class AiThinker_A7{
 
 private:
   int PIN_Power
