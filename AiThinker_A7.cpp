@@ -310,7 +310,7 @@ bool AiThinker_A7::TC_Sendln(String cmd){
 String AiThinker_A7::CCID(){
 
 }
-String AiThinker_A7::NameToIP(String ServerName){
+String AiThinker_A7::NameToIP(String ServerName, unsigned long timeOut){
   at("AT+CDNSGIP="+ServerName);
 
   unsigned long entry = millis();
