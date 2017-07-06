@@ -257,11 +257,7 @@ bool AiThinker_A7::Call_Number_Off(){
 }
 
 
-
-
-
-
-//******************下方是实现完毕，但还未经过测试的功能
+// ****************** The following is a function that has been completed but has not yet been tested
 
 bool AiThinker_A7::heartbeat(String time,String send,String get){
   if (time!="0"){
@@ -310,7 +306,7 @@ bool AiThinker_A7::TC_Sendln(String cmd){
 
 
 
-//******************下方是预留的但还未真正实现完毕的功能
+//****************** The bottom is reserved but not yet fully implemented
 String AiThinker_A7::CCID(){
 
 }
