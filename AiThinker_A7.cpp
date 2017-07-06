@@ -338,7 +338,7 @@ String AiThinker_A7::NameToIP(String ServerName){
     Serial.print("data = ");
     Serial.println(reply);
   }
-  return retVal;
+  return reply;
     
 }
 String AiThinker_A7::AliHTTPDNS(String ServerName){
