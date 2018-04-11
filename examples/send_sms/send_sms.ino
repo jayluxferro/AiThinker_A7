@@ -4,8 +4,11 @@
 #define GPRS_Serial_TX 8
 #define GPRS_Power_pin 9
 #define GPRS_Reset_pin 10
+#define APN "internet"
 
 AiThinker_A7 Board(GPRS_Serial_RX, GPRS_Serial_TX,GPRS_Power_pin,GPRS_Reset_pin); // RX, TX
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -13,7 +16,7 @@ void setup() {
   Board.debug();
   Board.begin(9600);
   // Start the network
-  Board.GPRS_Start();
+  Board.GPRS_Start(APN);
 
   Board.SendTextMessage("+1XXXXXXXXXX", "demo message");
 
