@@ -12,6 +12,7 @@ Provide SMS, call, GPRS networking (TCP UDP TCP data transmission) and other fun
 #define GPRS_Serial_TX 8
 #define GPRS_Power_pin 9
 #define GPRS_Reset_pin 10
+#define APN "browse"
 
 AiThinker_A7 Board(GPRS_Serial_RX, GPRS_Serial_TX,GPRS_Power_pin,GPRS_Reset_pin); // RX, TX
 
@@ -21,7 +22,7 @@ void setup() {
   //Board.debug();
   Board.begin(9600);
   // Start the network
-  Board.GPRS_Start();
+  Board.GPRS_Start(APN);
 
   // 1, send the data once:
   Board.Send_once("www.fengpiao.net","9001","I'm Data");
